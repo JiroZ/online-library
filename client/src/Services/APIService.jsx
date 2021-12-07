@@ -67,7 +67,7 @@ class APIService {
             password: password
         }
         
-        return axios.post(`http://${host}:${port}/user/auth`, body, APIService.config)
+        return axios.post(`https://${host}:${port}/user/auth`, body, APIService.config)
     }
 
     static registerUser(email, userName, password) {
@@ -80,7 +80,7 @@ class APIService {
         let body = JSON.stringify(user)
         console.log(user)
         
-        return axios.post(`http://${host}:${port}/user/registration`, body, APIService.config)
+        return axios.post(`https://${host}:${port}/user/registration`, body, APIService.config)
     }
 
     static getAccessRequestsByEmail(userEmail) {
