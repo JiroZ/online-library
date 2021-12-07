@@ -1,0 +1,47 @@
+server:
+  port: 8989
+
+spring:
+  application:
+    name: api-gateway
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+          lower-case-service-id: true
+#      globalcors:
+#        corsConfigurations:
+#          '[/**]':
+#            allowedOrigins: "*"
+#            allowedMethods:
+#              - GET
+#              - POST
+#              - PUT
+#              - DELETE
+#              - PATCH
+#              - OPTIONS
+      routes:
+        - id: book-service
+          uri: lb://BOOK-SERVICE
+          predicates:
+            - Path=/books/**
+        - id: user-service
+          uri: lb://USER-SERVICE
+          predicates:
+            - Path=/user/**
+        - id: access-service
+          uri: lb://ACCESS-SERVICE
+          predicates:
+            - Path=/access/**
+
+#eureka:
+#  instance:
+#    lease-renewal-interval-in-seconds: 28
+#    lease-expiration-duration-in-seconds: 1
+#    prefer-ip-address: true
+#    ip-address: ${EUREKA_IP:localhost}
+#
+#  client:
+#    service-url:
+#      defaultZone: = ${DEFAULT_ZONE:http://localhost:5000/eureka/}
