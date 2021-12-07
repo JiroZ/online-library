@@ -58,7 +58,7 @@ class AccessController(val accessService: AccessService) {
     @PostMapping("/reject")
     @Throws(UserException::class, AWSException::class, AccessException::class, BookException::class)
     fun rejectAccessRequest(@RequestBody message : RejectAccessRequestMessage, bindingResult: BindingResult): ResponseEntity<String> {
-        retu02rn ResponseEntity.ok(accessService.rejectAccess(message))
+        return ResponseEntity.ok(accessService.rejectAccess(message))
     }
 
     @GetMapping("/{emailId}")
