@@ -80,10 +80,7 @@ class DefaultUserService(
 
             for (dbUser in users) {
                 if (dbUser.email == userRegistrationRequest.email) {
-                    registrationMessage.registrationNotice = "Email Id is used"
-                    registrationMessage.user = dbUser
-                    registrationMessage.isRegistered = false
-                    userFound = true
+                    throw UserAlreadyExistsException("E-mail user ${userRegistrationRequest.email} already exists")
                 }
             }
 
@@ -111,11 +108,10 @@ class DefaultUserService(
         }
     }
 
-
-
     fun getAllUsers() : List<LibraryUser> {
         return userRepository.findAll()
     }
+
     @Throws(UserException::class)
     fun getUserByEmail(email: String): LibraryUser {
         try {

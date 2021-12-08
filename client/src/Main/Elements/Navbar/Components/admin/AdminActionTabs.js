@@ -120,8 +120,6 @@ const ManageBooksTab = () => {
     const [book, setBook] = useState()
     const [bookTitle, setBookTitle] = useState('')
     const [bookDescription, setBookDescription] = useState('')
-    const [addDisabled, setAddDisabled] = useState(true)
-    const [deleteDisabled, setDeleteDisabled] = useState(true)
     const [bookToDelete, setBookToDelete] = useState()
 
 
@@ -134,7 +132,8 @@ const ManageBooksTab = () => {
         formData.append('bookDescription', bookDescription)
         formData.append('bookFile', book)
 
-        APIService.addBook(formData).then(() => {
+        APIService.addBook(formData).then(response => {
+            console.log(response.data)
             window.location.reload()
         }).catch((err) => {
             console.warn('error during http call adding book', err);
@@ -147,6 +146,7 @@ const ManageBooksTab = () => {
 
         APIService.deleteBook(bookToDelete).then(response => {
             console.log(response.data)
+            window.location.reload()
         }).catch((err) => {
             console.warn('error during http call deleting book', err);
             console.warn('error during http call deleting book Response: ', err.response);
@@ -157,9 +157,8 @@ const ManageBooksTab = () => {
         setBook(e.target.files[0])
     }
 
-    const handleDeleteSelection = (e) => {
-        setDeleteDisabled(false)
-        setBookToDelete(e.target.value)
+    const handleDeleteSelectionSubmit = (e) => {
+        setBookToDelete(e)
     }
 
     const [books, setBooks] = useState([])
@@ -173,6 +172,10 @@ const ManageBooksTab = () => {
             console.log('User Response parsing failed. Error: Server Response', ex.response);
         });
     }, [])
+
+    function handleDeleteSelection(e) {
+        setBookToDelete(e.target.value)
+    }
 
     return (
         <>
@@ -203,18 +206,17 @@ const ManageBooksTab = () => {
                     <Form.Label> <strong>Delete Book</strong> </Form.Label>
                     <br/>
                     <Form.Label>Select Book to delete</Form.Label>
-                    <Form.Control as="select">
+                    <Form.Control as="select" onChange={e => handleDeleteSelection(e)}>
                         {
                             books.map((bookIndex, index) => {
                                 return (
-                                    <option value={bookIndex.id}
-                                            key={index}>{bookIndex.bookTitle} : {bookIndex.id}</option>
+                                    <option value={bookIndex.id} key={index}>{bookIndex.bookTitle} : {bookIndex.id}</option>
                                 )
                             })
                         }
                     </Form.Control>
                     <br/>
-                    <Button variant="primary" type="submit" onChange={e => handleDeleteSelection(e)}
+                    <Button variant="primary" type="submit" onChange={e => handleDeleteSelectionSubmit(e)}
                             onClick={(e) => handleBookDeleteSubmit(e)}>
                         Delete Book
                     </Button>

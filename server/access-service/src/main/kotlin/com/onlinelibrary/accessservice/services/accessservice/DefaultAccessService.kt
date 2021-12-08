@@ -131,50 +131,56 @@ class DefaultAccessService(
 
     @Throws(AccessException::class, UserException::class)
     override fun updateAccess(file: MultipartFile): String {
-        try {
-            val csvStream = file.inputStream
+        if(serverUser.isAdmin) {
+            try {
+                val csvStream = file.inputStream
 
-            val settings = CsvParserSettings()
-            settings.format.setLineSeparator("\n")
+                val settings = CsvParserSettings()
+                settings.format.setLineSeparator("\n")
 
-            val parser = CsvParser(settings)
-            val allRows: List<Array<String>> = parser.parseAll(InputStreamReader(csvStream, "UTF-8"))
+                val parser = CsvParser(settings)
+                val allRows: List<Array<String>> = parser.parseAll(InputStreamReader(csvStream, "UTF-8"))
 
-            for (row in allRows) {
-                val userEmail = row[0]
-                requestService.getUserByEmail(userEmail)
-                val issuedBookJson = row[1].replace("|||", ",")
+                for (row in allRows) {
+                    val userEmail = row[0]
+                    requestService.getUserByEmail(userEmail)
+                    val issuedBookJson = row[1].replace("|||", ",")
 
-                if (issuedBookJson != "[]") {
-                    val gson = GsonBuilder().create()
-                    val issuedBooks = gson.fromJson(issuedBookJson, Array<IssuedBook>::class.java).toMutableList()
+                    if (issuedBookJson != "[]") {
+                        val gson = GsonBuilder().create()
+                        val issuedBooks = gson.fromJson(issuedBookJson, Array<IssuedBook>::class.java).toMutableList()
 
-                    bookAccessRepository.save(
-                        BookAccess(
-                            userEmail,
-                            issuedBooks
+                        bookAccessRepository.save(
+                            BookAccess(
+                                userEmail,
+                                issuedBooks
+                            )
+                        )
+                    } else {
+                        if (bookAccessRepository.existsById(userEmail)) {
+                            bookAccessRepository.deleteById(userEmail)
+                        }
+                    }
+
+                    serverLogRepository.insert(
+                        ServerLog(
+                            ObjectId().toString(),
+                            LogActions.ACCESS_UPDATE.toString(),
+                            "Accesses updated via CSV by admin ${serverUser.email} for $userEmail",
+                            Date(System.currentTimeMillis())
                         )
                     )
-                } else {
-                    if (bookAccessRepository.existsById(userEmail)) {
-                        bookAccessRepository.deleteById(userEmail)
-                    }
                 }
+
+
+
+                return "Accesses updated successfully"
+            } catch (e: Exception) {
+                println(e.message)
+                throw UpdateAccessException("An exception occurred while updating accesses $e")
             }
-
-            serverLogRepository.insert(
-                ServerLog(
-                    ObjectId().toString(),
-                    LogActions.ACCESS_UPDATE.toString(),
-                    "Accesses updated via CSV",
-                    Date(System.currentTimeMillis())
-                )
-            )
-
-            return "Accesses updated successfully"
-        } catch (e: Exception) {
-            println(e.message)
-            throw UpdateAccessException("An exception occurred while updating accesses $e")
+        } else {
+            throw InvalidAccessException("This action is only performable by admins")
         }
     }
 

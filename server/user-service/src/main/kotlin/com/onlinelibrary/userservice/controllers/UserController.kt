@@ -2,6 +2,8 @@ package com.onlinelibrary.userservice.controllers
 
 import com.onlinelibrary.userservice.dto.messages.Messages.*
 import com.onlinelibrary.userservice.dto.user.LibraryUser
+import com.onlinelibrary.userservice.dto.user.ServerUser
+import com.onlinelibrary.userservice.exceptions.InvalidAccessException
 import com.onlinelibrary.userservice.exceptions.UserException
 import com.onlinelibrary.userservice.services.userservice.DefaultUserService
 import org.springframework.http.ResponseEntity
@@ -11,7 +13,8 @@ import javax.validation.Valid
 
 @RestController
 class UserController(
-    private val userService: DefaultUserService
+    private val userService: DefaultUserService,
+    private val serverUser: ServerUser
 ) {
     @PostMapping("/user/auth")
     @Throws(UserException::class)
@@ -47,7 +50,11 @@ class UserController(
 
     @GetMapping("/user/all")
     fun allUsers(): ResponseEntity<List<LibraryUser>> {
-        return ResponseEntity.ok(userService.getAllUsers())
+        if(serverUser.isAdmin) {
+            return ResponseEntity.ok(userService.getAllUsers())
+        } else {
+            throw InvalidAccessException("Invalid Access this method is only usable by admins")
+        }
     }
 
     private fun bindErrorResult(bindingResult: BindingResult) {

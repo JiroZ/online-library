@@ -27,10 +27,8 @@ class BookController(val bookService: BookService) {
     @GetMapping("/delete/{bookId}")
     @Throws(UserException::class, AWSException::class, AccessException::class, BookException::class)
     fun deleteBook(
-        @PathVariable bookId: String,
-        bindingResult: BindingResult
+        @PathVariable bookId: String
     ): ResponseEntity<BookDeleteResponseMessage> {
-        bindErrorResult(bindingResult)
         return ResponseEntity.ok(bookService.deleteBook(bookId))
     }
 
