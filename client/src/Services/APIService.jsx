@@ -1,6 +1,6 @@
 import axios from "axios";
 
-let host = `13.233.77.149`
+let host = `localhost`
 let port = 8989
 
 class APIService {

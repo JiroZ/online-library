@@ -237,10 +237,6 @@ c
 3client/src/Main/Elements/Navbar/Login/LoginForm.css,5\1\5107247599087a07df85e3c80e9f969aca50e50c
 n
 >client/src/Main/Elements/Navbar/Components/AdminCompoenent.jsx,c\e\ce767f921bd624688ca6d88a9881645533967e5f
-A
-client/src/App.js,f\6\f6b8a135eb07bb80aa582994bcf1a8ccacd783ee
-F
-client/src/App.test.js,a\b\abc8a42193ad6b1361f998423ea364e1e00c0712
 q
 Aclient/src/Main/Elements/Navbar/Components/ContactUsComponent.jsx,1\6\16c8d46060f2600a29c7ba2232aae36dfa3108cb
 _
@@ -249,8 +245,6 @@ M
 client/src/Main/Pages/Home.js,2\6\26285d67dffad7c5b7ce4c1a86864d57e2c82357
 l
 <client/src/Main/Elements/Navbar/Components/HomeComponent.jsx,d\0\d05fc4f82c37dd6879dc49203f929bf99a3f69e6
-H
-client/public/index.html,8\1\818a76598cddfc0ac5e6740251b5b4dc9ff67f2c
 \
 ,client/src/Redux/UserLogin/Reducers/index.js,4\8\489a57c673a75afaf455a4c60bcb752b9f50e013
 C

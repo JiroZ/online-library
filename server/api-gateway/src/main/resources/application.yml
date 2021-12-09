@@ -1,15 +1,15 @@
-server:
-  port: 8989
-
-spring:
-  application:
-    name: api-gateway
-  cloud:
-    gateway:
-      discovery:
-        locator:
-          enabled: true
-          lower-case-service-id: true
+#server:
+#  port: 8989
+#
+#spring:
+#  application:
+#    name: api-gateway
+#  cloud:
+#    gateway:
+#      discovery:
+#        locator:
+#          enabled: true
+#          lower-case-service-id: true
 #      globalcors:
 #        corsConfigurations:
 #          '[/**]':
@@ -21,19 +21,19 @@ spring:
 #              - DELETE
 #              - PATCH
 #              - OPTIONS
-      routes:
-        - id: book-service
-          uri: lb://BOOK-SERVICE
-          predicates:
-            - Path=/books/**
-        - id: user-service
-          uri: lb://USER-SERVICE
-          predicates:
-            - Path=/user/**
-        - id: access-service
-          uri: lb://ACCESS-SERVICE
-          predicates:
-            - Path=/access/**
+#      routes:
+#        - id: book-service
+#          uri: lb://BOOK-SERVICE
+#          predicates:
+#            - Path=/books/**
+#        - id: user-service
+#          uri: lb://USER-SERVICE
+#          predicates:
+#            - Path=/user/**
+#        - id: access-service
+#          uri: lb://ACCESS-SERVICE
+#          predicates:
+#            - Path=/access/**
 
 #eureka:
 #  instance:
